@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * Created by pengjikun on 2017/7/31.
  */
-@RequestMapping("/event")
+@RequestMapping("/qyh")
 @Controller
 @Log4j
 public class WeixinQYHController {
 
-    @RequestMapping("/")
+    @RequestMapping("/event")
     @ResponseBody
-    String hello() {
+    public String event() {
         return "Hello world!";
     }
 
