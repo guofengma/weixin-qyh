@@ -21,7 +21,7 @@
     </dependencies>
 
     <build>
-        <finalName>Sunny</finalName>
+        <finalName>weixin-qyh</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
