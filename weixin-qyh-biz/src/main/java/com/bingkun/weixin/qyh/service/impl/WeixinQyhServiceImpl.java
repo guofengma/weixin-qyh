@@ -91,8 +91,7 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
         String infoType = xml.substring(xml.indexOf("<InfoType>")+19, xml.indexOf("]]></InfoType>"));
         Objects.requireNonNull(infoType, "接收系统事件InfoType为空");
         if(SysEvent.SUITE_TICKET.equals(infoType)){
-            SysEventTicket sysEventTicket = XmlUtil.xml2Bean(xml);
-            return sysEventTicket;
+            return XmlUtil.xml2Bean(xml, SysEventTicket.class);
         }else if(infoType.contains(SysEvent._AUTH)){
             return XmlUtil.xml2Bean(xml, SysEventAuth.class);
         }else if(SysEvent.CHANGE_CONTACT.equals(infoType)){
