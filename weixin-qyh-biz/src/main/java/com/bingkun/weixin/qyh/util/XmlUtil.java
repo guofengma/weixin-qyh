@@ -28,6 +28,16 @@ public class XmlUtil {
         return t;
     }
 
+    public static SysEventTicket xml2Bean(String xmlStr) {
+        XStream xstream = new XStream(new DomDriver());
+        xstream.processAnnotations(SysEventTicket.class);
+        Object obj = xstream.fromXML(xmlStr);
+        if(obj instanceof SysEventTicket){
+            return (SysEventTicket)obj;
+        }
+        return null;
+    }
+
     /**
      * bean转化为xml，并为xml文本添加CDATA标记
      * @param obj

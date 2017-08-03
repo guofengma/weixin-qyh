@@ -7,12 +7,14 @@ import com.bingkun.weixin.qyh.service.RedisService;
 import com.bingkun.weixin.qyh.service.WeixinQyhService;
 import com.bingkun.weixin.qyh.util.CryptUtil;
 import com.bingkun.weixin.qyh.util.XmlUtil;
-import com.sun.xml.internal.bind.v2.TODO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by pengjikun on 2017/7/31.
@@ -38,8 +40,8 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
             String xml = cryptUtil.decryptMsg(msgSignature, timeStamp, nonce, postData);
             return this.handleEvent(xml);
         } catch (Exception e) {
-            log.error("解密失败", e);
-            throw new RuntimeException("解密失败", e);
+            log.error("处理系统事件失败", e);
+            throw new RuntimeException("处理系统事件失败", e);
         }
     }
 
@@ -49,52 +51,53 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
      * @return
      */
     private String handleEvent(String xml){
-        String infoType = xml.substring(xml.indexOf("<InfoType>")+19, xml.indexOf("]]></InfoType>"));
-
-        if(SysEvent.SUITE_TICKET.equals(infoType)){
-            SysEventTicket sysEventTicket = XmlUtil.xml2Bean(xml, SysEventTicket.class);
+        SysEvent sysEvent = getBeanFromXml(xml);
+        Objects.requireNonNull(sysEvent, "xml转化为bean返回空");
+        if(sysEvent.isSuiteTicket()){
+            SysEventTicket sysEventTicket = (SysEventTicket)sysEvent;
             // TODO: 2017/8/2 保存SuiteTicket
             redisService.set("SuiteTicket:"+sysEventTicket.getSuiteId(),
                     sysEventTicket.getSuiteTicket(), 7200);
-        }else if(SysEvent.CREATE_AUTH.equals(infoType)){
-            SysEventAuth sysEventAuth = XmlUtil.xml2Bean(xml, SysEventAuth.class);
+        }else if(sysEvent.isCreateAuth()){
             // TODO: 2017/8/2 授权成功处理
-            redisService.set("AuthCode:", sysEventAuth.getAuthCode());
-        }else if(SysEvent.CHANGE_AUTH.equals(infoType)){
-            SysEventAuth sysEventAuth = XmlUtil.xml2Bean(xml, SysEventAuth.class);
+        }else if(sysEvent.isChangeAuth()){
             // TODO: 2017/8/2 变更授权处理
-        }else if(SysEvent.CANCEL_AUTH.equals(infoType)){
-            SysEventAuth sysEventAuth = XmlUtil.xml2Bean(xml, SysEventAuth.class);
+        }else if(sysEvent.isCancelAuth()){
             // TODO: 2017/8/2 取消授权处理
-        }else if(SysEvent.CHANGE_CONTACT.equals(infoType)){
-            String changeType = xml.substring(xml.indexOf("<ChangeType>")+21, xml.indexOf("]]></ChangeType>"));
-            if(SysEvent.CREATE_USER.equals(changeType)){
-                SysEventUser sysEventUser = XmlUtil.xml2Bean(xml, SysEventUser.class);
-                // TODO: 2017/8/2 新增成员处理
-            }else if(SysEvent.UPDATE_USER.equals(changeType)){
-
-            }
+        }else if(sysEvent.isCreateUser()){
+            // TODO: 2017/8/2 新增成员处理
+        }else if(sysEvent.isUpdateUser()){
+            // TODO: 2017/8/2 更新成员处理
+        }else if(sysEvent.isDeleteUser()){
+            // TODO: 2017/8/2 删除成员处理
+        }else if(sysEvent.isCreateParty()){
+            // TODO: 2017/8/2 新增部门处理
+        }else if(sysEvent.isUpdateParty()){
+            // TODO: 2017/8/2 更新部门处理
+        }else if(sysEvent.isDeleteParty()){
+            // TODO: 2017/8/2 删除部门处理
+        }else if(sysEvent.isUpdateTag()){
+            // TODO: 2017/8/2 标签变更事件
         }
-
-        SysEvent sysEventDto = XmlUtil.xml2Bean(xml, SysEvent.class);
-        System.out.println(sysEventDto);
         return Constants.SUCCESS;
     }
 
+    /**
+     * xml转化为对应的bean
+     * @param xml
+     * @return
+     */
     private SysEvent getBeanFromXml(String xml){
         String infoType = xml.substring(xml.indexOf("<InfoType>")+19, xml.indexOf("]]></InfoType>"));
-        if(StringUtils.isEmpty(infoType)){
-            throw new RuntimeException("接收系统事件InfoType为空");
-        }
+        Objects.requireNonNull(infoType, "接收系统事件InfoType为空");
         if(SysEvent.SUITE_TICKET.equals(infoType)){
-            return XmlUtil.xml2Bean(xml, SysEventTicket.class);
+            SysEventTicket sysEventTicket = XmlUtil.xml2Bean(xml);
+            return sysEventTicket;
         }else if(infoType.contains(SysEvent._AUTH)){
             return XmlUtil.xml2Bean(xml, SysEventAuth.class);
         }else if(SysEvent.CHANGE_CONTACT.equals(infoType)){
             String changeType = xml.substring(xml.indexOf("<ChangeType>")+21, xml.indexOf("]]></ChangeType>"));
-            if(StringUtils.isEmpty(changeType)){
-                throw new RuntimeException("接收系统事件ChangeType为空");
-            }
+            Objects.requireNonNull(changeType, "接收系统事件ChangeType为空");
             if(changeType.contains(SysEvent._USER)){
                 return XmlUtil.xml2Bean(xml, SysEventUser.class);
             }else if(changeType.contains(SysEvent._PARTY)){

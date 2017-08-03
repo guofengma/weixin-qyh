@@ -77,6 +77,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!--支持热启动-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!--使用lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -103,6 +110,22 @@
             <artifactId>xstream</artifactId>
             <version>1.4.9</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.35</version>
+        </dependency>
+
+
 
 
     </dependencies>
