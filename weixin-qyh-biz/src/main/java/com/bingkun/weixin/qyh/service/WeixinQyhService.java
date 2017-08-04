@@ -1,6 +1,8 @@
 package com.bingkun.weixin.qyh.service;
 
-import com.bingkun.weixin.qyh.qq.weixin.mp.aes.AesException;
+import com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes.AesException;
+
+import java.util.Map;
 
 /**
  * Created by pengjikun on 2017/7/31.
@@ -8,21 +10,58 @@ import com.bingkun.weixin.qyh.qq.weixin.mp.aes.AesException;
 public interface WeixinQyhService {
 
     /**
-     * 接入时验证URL
-     * @param msgSignature
-     * @param timeStamp
-     * @param nonce
-     * @param echoStr
-     * @return
+     * 保存套件ticket
+     * @param suiteId
+     * @param suiteTicket
      */
-    String verifyUrl(String msgSignature, String timeStamp, String nonce, String echoStr) throws AesException;
+    void saveSuiteTicket(String suiteId, String suiteTicket);
 
     /**
-     * 处理系统事件
-     * @param timeStamp
-     * @param msgSignature
-     * @param nonce
-     * @param postData
+     * 取套件ticket
+     * @param suiteId
+     * @return
      */
-    String receiveSysEvent(String timeStamp, String msgSignature, String nonce, String postData);
+    String getSuiteTicket(String suiteId);
+
+    /**
+     * 取套件令牌
+     * @param suiteId
+     * @return
+     */
+    String getSuiteAccessToken(String suiteId);
+
+    /**
+     * 更新套件令牌
+     * @param suiteId
+     * @param suiteAccessToken
+     */
+    void updateSuiteAccessToken(String suiteId, String suiteAccessToken);
+
+    /**
+     * 保存授权公众号信息
+     * @param map
+     */
+    void saveCorpAuthInfo(Map<String, Object> map);
+
+    /**
+     * 保存企业access_token
+     * @param authCorpID
+     * @param corpAccessToken
+     */
+    void saveCorpAccessToken(String authCorpID, String corpAccessToken);
+
+    /**
+     * 取企业access_token
+     * @param authCorpID
+     * @return
+     */
+    String getCorpAccessToken(String authCorpID);
+
+    /**
+     * 获取永久授权码
+     * @param authCorpID
+     * @return
+     */
+    String getPermanentCode(String authCorpID);
+
 }

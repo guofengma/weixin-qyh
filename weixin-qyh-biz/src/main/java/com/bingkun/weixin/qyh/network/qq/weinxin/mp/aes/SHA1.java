@@ -6,7 +6,7 @@
 
 // ------------------------------------------------------------------------
 
-package com.bingkun.weixin.qyh.qq.weixin.mp.aes;
+package com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes;
 
 import java.security.MessageDigest;
 import java.util.Arrays;

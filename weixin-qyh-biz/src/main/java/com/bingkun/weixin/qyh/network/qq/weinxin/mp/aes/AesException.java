@@ -1,4 +1,4 @@
-package com.bingkun.weixin.qyh.qq.weixin.mp.aes;
+package com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes;
 
 @SuppressWarnings("serial")
 public class AesException extends Exception {

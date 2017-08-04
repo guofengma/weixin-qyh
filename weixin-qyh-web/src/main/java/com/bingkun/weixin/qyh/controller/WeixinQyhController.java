@@ -1,11 +1,14 @@
 package com.bingkun.weixin.qyh.controller;
 
+import com.bingkun.weixin.qyh.logic.WeixinQyhAuthLogic;
 import com.bingkun.weixin.qyh.service.WeixinQyhService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -16,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Log4j
 public class WeixinQyhController {
     @Autowired
-    private WeixinQyhService weixinQyhService;
+    private WeixinQyhAuthLogic weixinQyhAuthLogic;
 
     /**
      * 接收微信的系统事件，包括：
@@ -38,7 +41,7 @@ public class WeixinQyhController {
 
         log.info("正在接受微信服务器推送系统事件......");
         response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().println(weixinQyhService.receiveSysEvent(timeStamp, msgSignature, nonce, postData));
+        response.getWriter().println(weixinQyhAuthLogic.receiveSysEvent(timeStamp, msgSignature, nonce, postData));
     }
 
     /**
@@ -58,7 +61,25 @@ public class WeixinQyhController {
 
         log.info("正在接收验证请求......");
         response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().println(weixinQyhService.verifyUrl(msgSignature, timeStamp, nonce, echoStr));
+        response.getWriter().println(weixinQyhAuthLogic.verifyUrl(msgSignature, timeStamp, nonce, echoStr));
     }
+
+    /**
+     * 引导用户进入授权页
+     */
+    @RequestMapping(value = "/gotoAuthPage", method = RequestMethod.GET)
+    public RedirectView gotoAuthPage(HttpServletRequest request)  {
+        log.info("引导用户进入授权页");
+        String url = weixinQyhAuthLogic.getAuthorization(request);
+        return new RedirectView(url);
+    }
+
+    @RequestMapping(value = "/callback", method = RequestMethod.GET)
+    public RedirectView callback(@RequestParam("auth_code") String authCode)  {
+        log.info("授权成功，正在回调");
+        wxMpServiceAgent.saveAuthWechatOA(authCode);
+        return new RedirectView("/");
+    }
+
 
 }

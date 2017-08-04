@@ -1,8 +1,8 @@
 package com.bingkun.weixin.qyh.util;
 
 import com.bingkun.weixin.qyh.constants.Constants;
-import com.bingkun.weixin.qyh.qq.weixin.mp.aes.AesException;
-import com.bingkun.weixin.qyh.qq.weixin.mp.aes.WXBizMsgCrypt;
+import com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes.AesException;
+import com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes.WXBizMsgCrypt;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,7 +19,7 @@ public class CryptUtil {
      */
     public CryptUtil(){
         try {
-            wxBizMsgCryptCheckUrl = new WXBizMsgCrypt(Constants.TOKEN, Constants.ENCODEING_AESKEY, Constants.CORP_ID);
+            wxBizMsgCryptCheckUrl = new WXBizMsgCrypt(Constants.TOKEN, Constants.ENCODEING_AESKEY, Constants.THIRD_CORP_ID);
             wxBizMsgCrypt = new WXBizMsgCrypt(Constants.TOKEN, Constants.ENCODEING_AESKEY, Constants.SUITE_ID);
         } catch (AesException e) {
             throw new RuntimeException("init WXBizMsgCrypt failed", e);
