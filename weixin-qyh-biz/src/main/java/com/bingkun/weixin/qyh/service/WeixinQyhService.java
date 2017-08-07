@@ -39,9 +39,9 @@ public interface WeixinQyhService {
 
     /**
      * 保存授权公众号信息
-     * @param map
+     * @param authCode
      */
-    void saveCorpAuthInfo(Map<String, Object> map);
+    void saveCorpAuthInfo(String authCode);
 
     /**
      * 保存企业access_token

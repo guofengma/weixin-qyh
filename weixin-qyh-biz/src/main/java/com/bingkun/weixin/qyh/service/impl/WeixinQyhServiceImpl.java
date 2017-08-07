@@ -52,7 +52,8 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
     }
 
     @Override
-    public void saveCorpAuthInfo(Map<String, Object> map) {
+    public void saveCorpAuthInfo(String authCode) {
+        Map<String, Object> map = wechatQyhThirdApi.getPermanentCode(authCode);
         String corpAccessToken = CommonUtil.getString(map.get("access_token"));
         String permanentCode = CommonUtil.getString(map.get("permanent_code"));
         Map<String, Object> corpInfo = (Map<String, Object>) map.get("auth_corp_info");

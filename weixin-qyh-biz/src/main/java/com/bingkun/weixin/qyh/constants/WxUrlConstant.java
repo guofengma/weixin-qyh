@@ -13,6 +13,10 @@ public class WxUrlConstant {
      */
     public static final String GET_PRE_AUTH_CODE = "https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code?suite_access_token=";
     /**
+     *
+     */
+    public static final String LOGIN_PAGE = "https://qy.weixin.qq.com/cgi-bin/loginpage?";
+    /**
      * 设置授权配置
      */
     public static final String SET_SESSION_INFO = "https://qyapi.weixin.qq.com/cgi-bin/service/set_session_info?suite_access_token=";

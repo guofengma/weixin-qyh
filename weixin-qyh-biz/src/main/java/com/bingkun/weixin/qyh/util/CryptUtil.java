@@ -52,7 +52,7 @@ public class CryptUtil {
     }
 
     /**
-     * 验证URL，用的是服务商的CorpId进行解密处理
+     * 套件接入验证URL，用的是服务商的CorpId进行解密处理
      * @param msgSignature
      * @param timeStamp
      * @param nonce
@@ -61,6 +61,20 @@ public class CryptUtil {
      * @throws AesException
      */
     public String verifyUrl(String msgSignature, String timeStamp, String nonce, String echoStr) throws AesException {
+        return wxBizMsgCryptCheckUrl.verifyUrl(msgSignature, timeStamp, nonce, echoStr);
+    }
+
+    /**
+     * 企业应用接入验证URL，用的是授权企业的CorpId进行解密处理
+     * @param corpId
+     * @param msgSignature
+     * @param timeStamp
+     * @param nonce
+     * @param echoStr
+     * @return
+     * @throws AesException
+     */
+    public String verifyUrl(String corpId, String msgSignature, String timeStamp, String nonce, String echoStr) throws AesException {
         return wxBizMsgCryptCheckUrl.verifyUrl(msgSignature, timeStamp, nonce, echoStr);
     }
 

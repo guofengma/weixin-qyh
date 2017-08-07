@@ -1,9 +1,11 @@
-package com.bingkun.weixin.qyh.logic;
+package com.bingkun.weixin.qyh.service.logic;
 
 import com.bingkun.weixin.qyh.constants.Constants;
+import com.bingkun.weixin.qyh.constants.WxUrlConstant;
 import com.bingkun.weixin.qyh.dto.weixin.sysEventDto.*;
 import com.bingkun.weixin.qyh.network.WechatQyhThirdApi;
 import com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes.AesException;
+import com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes.WXBizMsgCrypt;
 import com.bingkun.weixin.qyh.service.WeixinQyhService;
 import com.bingkun.weixin.qyh.util.CryptUtil;
 import com.bingkun.weixin.qyh.util.XmlUtil;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
 import java.util.Objects;
 
 /**
@@ -48,7 +52,7 @@ public class WeixinQyhAuthLogic {
      */
     public String receiveSysEvent(String timeStamp, String msgSignature, String nonce, String postData) {
         String result = "\n timestamp: " + timeStamp + "\n msgSignature: " + msgSignature + "\n nonce: " + nonce + "\n postData: " + postData;
-        log.info("正在解密...." + result);
+        log.info("正在解密系统事件...." + result);
         try {
             String xml = cryptUtil.decryptMsg(msgSignature, timeStamp, nonce, postData);
             return this.handleSysEvent(xml);
@@ -70,9 +74,8 @@ public class WeixinQyhAuthLogic {
             SysEventTicket sysEventTicket = (SysEventTicket)sysEvent;
             weixinQyhService.saveSuiteTicket(sysEventTicket.getSuiteId(), sysEventTicket.getSuiteTicket());
         }else if(sysEvent.isCreateAuth()){
-            // TODO: 2017/8/2 授权成功处理
             SysEventAuth sysEventAuth = (SysEventAuth)sysEvent;
-            wechatQyhThirdApi.getPermanentCode(sysEventAuth.getAuthCode());
+            weixinQyhService.saveCorpAuthInfo(sysEventAuth.getAuthCode());
         }else if(sysEvent.isChangeAuth()){
             // TODO: 2017/8/2 变更授权处理
         }else if(sysEvent.isCancelAuth()){
@@ -120,4 +123,58 @@ public class WeixinQyhAuthLogic {
         }
         return null;
     }
+
+    /**
+     * 引导用户进入授权页处理
+     * @param request
+     * @return
+     */
+    public String getAuthPageUrl(HttpServletRequest request){
+        try {
+            String redirectUrl = "/qyh/callback";
+            String requestURL = request.getRequestURL().toString();
+            String contextPath = request.getContextPath();
+            String redirectUri = requestURL.substring(0, requestURL.indexOf(contextPath))+contextPath+redirectUrl;
+            redirectUri = URLEncoder.encode(redirectUri, "UTF-8");
+            String preAuthCode = wechatQyhThirdApi.getPreAuthCode();
+            return WxUrlConstant.LOGIN_PAGE + "suite_id=" + Constants.SUITE_ID +
+                    "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + redirectUri;
+        } catch (Exception e) {
+            log.error("获取用户授权页链接失败", e);
+        }
+        return null;
+    }
+
+    /**
+     * 接收授权企业用户信息事件
+     * @param timeStamp
+     * @param msgSignature
+     * @param nonce
+     * @param postData
+     */
+    public String receiveCropEvent(String corpId, String msgSignature, String timeStamp, String nonce, String postData) {
+        String result = "\n timestamp: " + timeStamp + "\n msgSignature: " + msgSignature + "\n nonce: " + nonce + "\n postData: " + postData;
+        log.info("正在解密授权企业用户信息事件...." + result);
+        try {
+            WXBizMsgCrypt wxBizMsgCrypt = new WXBizMsgCrypt(Constants.TOKEN, Constants.ENCODEING_AESKEY, corpId);
+            String xml = wxBizMsgCrypt.decryptMsg(msgSignature, timeStamp, nonce, postData);
+            String resultMsg = this.handleCorpEvent(corpId, xml);
+            return (resultMsg==null)?"":wxBizMsgCrypt.encryptMsg(result, timeStamp, nonce);
+        } catch (Exception e) {
+            log.error("处理授权企业用户信息事件失败", e);
+            throw new RuntimeException("处理授权企业用户信息事件失败", e);
+        }
+    }
+
+    /**
+     * 处理授权企业的用户信息事件
+     * @param corpId
+     * @param xml
+     * @return
+     */
+    private String handleCorpEvent(String corpId, String xml){
+        System.out.println(corpId + ">>><<<" + xml);
+        return null;
+    }
+
 }

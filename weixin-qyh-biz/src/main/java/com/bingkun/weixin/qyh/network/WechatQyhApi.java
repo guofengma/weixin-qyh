@@ -87,7 +87,7 @@ public class WechatQyhApi {
         Assert.notNull(wechatRetMap, "调用微信接口返回结果为空");
         String errcode = CommonUtil.getString(wechatRetMap.get("errcode"));
         String errmsg = CommonUtil.getString(wechatRetMap.get("errmsg"));
-        Assert.isTrue(!"".equals(errcode) && !"0".equals(errcode), String.format("调用微信接口异常errcode:%s，errmsg:%s", errcode, errmsg));
+        Assert.isTrue(!"".equals(errcode) || !"0".equals(errcode), String.format("调用微信接口异常errcode:%s，errmsg:%s", errcode, errmsg));
         return wechatRetMap;
     }
 
