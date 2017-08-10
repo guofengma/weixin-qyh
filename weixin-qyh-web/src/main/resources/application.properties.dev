@@ -42,6 +42,6 @@ spring.redis.pool.min-idle=0
 spring.redis.timeout=6000
 
 # Log≈‰÷√
-logging.file=/app1/data/log/weixin-qyh/app.log
+logging.file=D:/data/applogs/weixin-qyh/logs/app.log
 logging.level.*=INFO
 

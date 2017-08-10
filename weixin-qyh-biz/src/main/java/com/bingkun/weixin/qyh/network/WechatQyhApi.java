@@ -51,7 +51,7 @@ public class WechatQyhApi {
                 if ("40001".equals(errcode) || "40014".equals(errcode) || "42001".equals(errcode)) {
                     log.error("corpAccessToken失效，重新获取再试一次" + " >>>url: " + url + " reqMap: " + reqMap + " errmsg: " + wechatRetMap);
                     String permanentCode = weixinQyhService.getPermanentCode(authCorpID);
-                    corpAccessToken = wechatQyhThirdApi.getCorpTokenApi(authCorpID, permanentCode);
+                    corpAccessToken = wechatQyhThirdApi.getCorpAccessTokenApi(authCorpID, permanentCode);
                     reqUrl = replaceUrlParam(reqUrl, "access_token", corpAccessToken);
                     wechatRetMap = HttpRequest.sendRequest(reqUrl, method, req);
                 }

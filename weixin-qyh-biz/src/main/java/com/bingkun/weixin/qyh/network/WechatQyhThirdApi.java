@@ -108,11 +108,11 @@ public class WechatQyhThirdApi {
     }
 
     /**
-     * 获取企业access_token
+     * 获取授权企业access_token
      * @param authCorpID
      * @return permanentCode
      */
-    public String getCorpTokenApi(String authCorpID, String permanentCode) {
+    public String getCorpAccessTokenApi(String authCorpID, String permanentCode) {
         try {
             Map<String, Object> reqMap = new HashMap<>();
             reqMap.put("suite_id", Constants.SUITE_ID);
