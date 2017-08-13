@@ -9,7 +9,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,18 +33,20 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
     private WechatQyhThirdApi wechatQyhThirdApi;
 
     @Override
+    @CachePut(value = "SuiteTicketCache", key = "'SuiteTicket-' + #suiteId")
     public void saveSuiteTicket(String suiteId, String suiteTicket) {
         redisTemplate.opsForValue().set("SuiteTicket:" + suiteId, suiteTicket, 600);
     }
 
     @Override
-    @Cacheable(value="cache-key")
+    @Cacheable(value = "SuiteTicketCache", key = "'SuiteTicket-' + #suiteId")
     public String getSuiteTicket(String suiteId) {
         // TODO: 2017/8/4 要改为从mysql取
         return redisTemplate.opsForValue().get("SuiteTicket:" + suiteId);
     }
 
     @Override
+    @Cacheable(value = "SuiteAccessTokenCache", key = "'SuiteAccessToken-' + #suiteId")
     public String getSuiteAccessToken(String suiteId) {
         //先从db中获取suiteAccessToken，如果获取不到再通过接口获取
         // TODO: 2017/8/4 要改为从mysql取，用redis缓存
@@ -53,6 +58,7 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
     }
 
     @Override
+    @CachePut(value = "SuiteAccessTokenCache", key = "'SuiteAccessToken-' + #suiteId")
     public void updateSuiteAccessToken(String suiteId, String suiteAccessToken) {
         // TODO: 2017/8/4 要改为写入mysql,redis缓存
         redisTemplate.opsForValue().set("SuiteAccessToken:" + Constants.SUITE_ID, suiteAccessToken, 7200);
@@ -65,6 +71,8 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
         String permanentCode = CommonUtil.getString(map.get("permanent_code"));
         Map<String, Object> corpInfo = (Map<String, Object>) map.get("auth_corp_info");
         String authCorpID = CommonUtil.getString(corpInfo.get("corpid"));
+        clearPermanentCode(authCorpID);
+
         // TODO: 2017/8/4 保存到mysql
         List<Map<String, Object>> authList = getAuthCorpList();
         Map<String, Object> authMap = Maps.newHashMap();
@@ -77,6 +85,7 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
     }
 
     @Override
+    @CachePut(value = "CorpAccessTokenCache", key = "'CorpAccessToken-' + #authCorpID")
     public void saveCorpAccessToken(String authCorpID, String corpAccessToken) {
         // TODO: 2017/8/4  要改为写入mysql,redis缓存
         List<Map<String, Object>> authList = getAuthCorpList();
@@ -93,6 +102,7 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
     }
 
     @Override
+    @Cacheable(value = "CorpAccessTokenCache", key = "'CorpAccessToken-' + #authCorpID")
     public String getCorpAccessToken(String authCorpID) {
         // TODO: 2017/8/4 将来要改为从mysql取
         List<Map<String, Object>> authList = getAuthCorpList();
@@ -101,11 +111,21 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
     }
 
     @Override
+    @Cacheable(value = "PermanentCodeCache", key = "'PermanentCode-' + #authCorpID")
     public String getPermanentCode(String authCorpID) {
         // TODO: 2017/8/4 将来要改为从mysql取，redis缓存
         List<Map<String, Object>> authList = getAuthCorpList();
         return Optional.ofNullable(authList).map(maps -> maps.stream().filter(map -> authCorpID.equals(CommonUtil.getString(map.get("AuthCorpID"))))
                 .map(map -> map.get("PermanentCode")).findFirst().get().toString()).orElse(null);
+    }
+
+    /**
+     * 用于清除PermanentCode缓存
+     * @param authCorpID
+     */
+    @CacheEvict(value = "PermanentCodeCache", key = "'PermanentCode-' + #authCorpID")
+    public void clearPermanentCode(String authCorpID){
+        return;
     }
 
     @Override

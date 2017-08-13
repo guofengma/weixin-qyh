@@ -1,5 +1,7 @@
 package com.bingkun.weixin.qyh.service;
 
+import com.bingkun.weixin.qyh.constants.Constants;
+import com.bingkun.weixin.qyh.service.impl.WeixinQyhServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +15,32 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest()
 public class WeixinQyhServiceTest {
     @Autowired
-    private WeixinQyhService weixinQyhService;
+    private WeixinQyhServiceImpl weixinQyhService;
 
     @Test
     public void saveSuiteTicket(){
-        weixinQyhService.saveSuiteTicket("suiteId123", "test123");
+        weixinQyhService.saveSuiteTicket(Constants.SUITE_ID, "testValue44");
     }
 
     @Test
     public void getSuiteTicket(){
-        String suiteId123 = weixinQyhService.getSuiteTicket("suiteId123");
+        String suiteId123 = null;
+        try{
+            suiteId123 = weixinQyhService.getSuiteTicket(Constants.SUITE_ID);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         System.out.println(suiteId123);
+    }
+
+    @Test
+    public void getPermanentCode(){
+        String wx97abc13e7c480fa5 = weixinQyhService.getPermanentCode("wx97abc13e7c480fa5");
+        System.out.println(wx97abc13e7c480fa5);
+    }
+
+    @Test
+    public void clearPermanentCode(){
+        weixinQyhService.clearPermanentCode("wx97abc13e7c480fa5");
     }
 }
