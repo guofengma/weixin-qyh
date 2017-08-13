@@ -92,7 +92,7 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
 
     @Override
     public String getCorpAccessToken(String authCorpID) {
-        // TODO: 2017/8/4 奖励要改为从mysql取
+        // TODO: 2017/8/4 将来要改为从mysql取
         List<Map<String, Object>> authList = getAuthCorpList();
         return Optional.ofNullable(authList).map(maps -> maps.stream().filter(map -> authCorpID.equals(CommonUtil.getString(map.get("AuthCorpID"))))
                 .map(map -> map.get("CorpAccessToken")).findFirst().get().toString()).orElse(null);

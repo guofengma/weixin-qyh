@@ -13,14 +13,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling //可配置定时任务
 @MapperScan(basePackages="com.bingkun.weixin.qyh.dao") //扫描Mapper接口
-public class Start extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Start.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Start.class);
+        return application.sources(Application.class);
     }
 }

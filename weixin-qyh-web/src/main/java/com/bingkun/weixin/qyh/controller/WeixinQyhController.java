@@ -45,7 +45,7 @@ public class WeixinQyhController {
                                 @RequestBody String postData, HttpServletResponse response) throws Exception {
 
         log.info("正在接收套件系统事件请求......");
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType(Constants.CONTENT_TYPE);
         response.getWriter().println(weixinQyhAuthLogic.receiveSysEvent(timeStamp, msgSignature, nonce, postData));
     }
 
@@ -65,7 +65,7 @@ public class WeixinQyhController {
                               @RequestParam("echostr") String echoStr, HttpServletResponse response) throws Exception {
 
         log.info("正在验证套件接入请求......");
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType(Constants.CONTENT_TYPE);
         response.getWriter().println(weixinQyhAuthLogic.verifyUrl(msgSignature, timeStamp, nonce, echoStr));
     }
 
@@ -93,7 +93,7 @@ public class WeixinQyhController {
 
     /**
      * 接入企业微信应用的用户消息验证URL
-     * @param corpId
+     * @param corpId  注意：验证url时corpId是第三方服务商的，真正的授权方企业发送用户消息事件时用的各自企业方的corpId
      * @param timeStamp
      * @param msgSignature
      * @param nonce
@@ -106,8 +106,8 @@ public class WeixinQyhController {
                           @RequestParam("msg_signature") String msgSignature,
                           @RequestParam("nonce") String nonce,
                           @RequestParam("echostr") String echoStr, HttpServletResponse response) throws Exception {
-        log.info("正在验证托管企业微信应用接入请求......");
-        response.setContentType("text/html;charset=UTF-8");
+        log.info("正在验证授权企业微信应用接入请求corpId：" + corpId);
+        response.setContentType(Constants.CONTENT_TYPE);
         response.getWriter().println(weixinQyhAuthLogic.verifyUrl(msgSignature, timeStamp, nonce, echoStr));
     }
 
@@ -127,7 +127,7 @@ public class WeixinQyhController {
                                  @RequestParam("nonce") String nonce,
                                  @RequestBody String postData, HttpServletResponse response) throws Exception {
         log.info("正在接收企业微信应用的用户消息请求......");
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType(Constants.CONTENT_TYPE);
         response.getWriter().println(weixinQyhAuthLogic.receiveCropEvent(corpId, msgSignature, timeStamp, nonce, postData));
     }
 

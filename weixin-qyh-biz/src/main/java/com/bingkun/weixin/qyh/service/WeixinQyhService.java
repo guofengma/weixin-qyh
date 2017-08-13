@@ -1,7 +1,5 @@
 package com.bingkun.weixin.qyh.service;
 
-import com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes.AesException;
-
 import java.util.List;
 import java.util.Map;
 
