@@ -2,7 +2,7 @@ package com.bingkun.weixin.qyh.service.logic;
 
 import com.bingkun.weixin.qyh.constants.Constants;
 import com.bingkun.weixin.qyh.constants.WxUrlConstant;
-import com.bingkun.weixin.qyh.dto.weixin.sysEventDto.*;
+import com.bingkun.weixin.qyh.dto.sysEventDto.*;
 import com.bingkun.weixin.qyh.network.WechatQyhThirdApi;
 import com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes.AesException;
 import com.bingkun.weixin.qyh.network.qq.weinxin.mp.aes.WXBizMsgCrypt;

@@ -1,13 +1,12 @@
 package com.bingkun.weixin.qyh.util;
 
-import com.bingkun.weixin.qyh.dto.weixin.sysEventDto.SysEventTicket;
+import com.bingkun.weixin.qyh.dto.sysEventDto.SysEventTicket;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
-import java.beans.Encoder;
 import java.io.Writer;
 
 /**

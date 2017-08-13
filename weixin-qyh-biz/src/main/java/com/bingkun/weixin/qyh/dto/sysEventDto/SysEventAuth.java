@@ -1,4 +1,4 @@
-package com.bingkun.weixin.qyh.dto.weixin.sysEventDto;
+package com.bingkun.weixin.qyh.dto.sysEventDto;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Data;

@@ -19,4 +19,10 @@ public class WeixinQyhServiceTest {
     public void saveSuiteTicket(){
         weixinQyhService.saveSuiteTicket("suiteId123", "test123");
     }
+
+    @Test
+    public void getSuiteTicket(){
+        String suiteId123 = weixinQyhService.getSuiteTicket("suiteId123");
+        System.out.println(suiteId123);
+    }
 }
