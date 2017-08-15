@@ -19,14 +19,14 @@ public class WeixinQyhServiceTest {
 
     @Test
     public void saveSuiteTicket(){
-        weixinQyhService.saveSuiteTicket(Constants.SUITE_ID, "testValue44");
+        weixinQyhService.saveSuiteTicket("testKey", "testValue22");
     }
 
     @Test
     public void getSuiteTicket(){
         String suiteId123 = null;
         try{
-            suiteId123 = weixinQyhService.getSuiteTicket(Constants.SUITE_ID);
+            suiteId123 = weixinQyhService.getSuiteTicket("testKey");
         }catch (Exception e){
             e.printStackTrace();
         }

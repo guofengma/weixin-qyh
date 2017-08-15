@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by pengjikun on 2017/7/31.
@@ -35,7 +36,7 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
     @Override
     @CachePut(value = "SuiteTicketCache", key = "'SuiteTicket-' + #suiteId")
     public void saveSuiteTicket(String suiteId, String suiteTicket) {
-        redisTemplate.opsForValue().set("SuiteTicket:" + suiteId, suiteTicket, 600);
+        redisTemplate.opsForValue().set("SuiteTicket:" + suiteId, suiteTicket, 600, TimeUnit.SECONDS);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class WeixinQyhServiceImpl implements WeixinQyhService {
     @CachePut(value = "SuiteAccessTokenCache", key = "'SuiteAccessToken-' + #suiteId")
     public void updateSuiteAccessToken(String suiteId, String suiteAccessToken) {
         // TODO: 2017/8/4 要改为写入mysql,redis缓存
-        redisTemplate.opsForValue().set("SuiteAccessToken:" + Constants.SUITE_ID, suiteAccessToken, 7200);
+        redisTemplate.opsForValue().set("SuiteAccessToken:" + Constants.SUITE_ID, suiteAccessToken, 7200, TimeUnit.SECONDS);
     }
 
     @Override
