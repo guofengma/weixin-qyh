@@ -34,6 +34,22 @@ public class WeixinQyhServiceTest {
     }
 
     @Test
+    public void saveCorpAuthInfo(){
+        weixinQyhService.saveCorpAuthInfo("");
+    }
+
+    @Test
+    public void updateCorpAccessToken(){
+        weixinQyhService.updateCorpAccessToken("authCorpID", "I am CorpAccessToken");
+    }
+
+    @Test
+    public void getCorpAccessToken(){
+        String accessToken = weixinQyhService.getCorpAccessToken("authCorpID");
+        System.out.println(accessToken);
+    }
+
+    @Test
     public void getPermanentCode(){
         String wx97abc13e7c480fa5 = weixinQyhService.getPermanentCode("wx97abc13e7c480fa5");
         System.out.println(wx97abc13e7c480fa5);

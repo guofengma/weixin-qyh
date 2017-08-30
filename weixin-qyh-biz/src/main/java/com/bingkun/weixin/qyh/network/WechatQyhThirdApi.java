@@ -125,7 +125,7 @@ public class WechatQyhThirdApi {
                 if ("".equals(errcode) || "0".equals(errcode)) {
                     log.info("获取CorpAccessToken成功: " + retMap + " >>>url: " + reqUrl + " reqMap: " + reqMap + " authCorpID: " + authCorpID);
                     String corpAccessToken = (String) retMap.get("access_token");
-                    weixinQyhService.saveCorpAccessToken(authCorpID, corpAccessToken);
+                    weixinQyhService.updateCorpAccessToken(authCorpID, corpAccessToken);
                     return corpAccessToken;
                 } else {
                     log.error("获取CorpAccessToken失败: " + retMap + " >>>url: " + reqUrl + " reqMap: " + reqMap + " authAppID: " + authCorpID);

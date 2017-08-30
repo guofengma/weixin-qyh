@@ -43,11 +43,11 @@ public interface WeixinQyhService {
     void saveCorpAuthInfo(String authCode);
 
     /**
-     * 保存企业access_token
+     * 更新企业access_token
      * @param authCorpID
      * @param corpAccessToken
      */
-    void saveCorpAccessToken(String authCorpID, String corpAccessToken);
+    void updateCorpAccessToken(String authCorpID, String corpAccessToken);
 
     /**
      * 取企业access_token
