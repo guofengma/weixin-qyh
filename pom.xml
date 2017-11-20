@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bingkun.weixin.qyh</groupId>
-    <artifactId>weixin-qyh</artifactId>
+    <groupId>com.bingkun.weixin.mulberry</groupId>
+    <artifactId>mulberry-camp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>weixin-qyh-biz</module>
-        <module>weixin-qyh-web</module>
+        <module>mulberry-camp-biz</module>
+        <module>mulberry-camp-web</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -30,6 +30,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
 
         <!--数据库访问jdbc -->
